@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.0 (2026-09-23)
+
+首个稳定版（stable）。整合 v0.1.0 第一性原理方法论与 v0.2.0 对标 Uncle Bob 的四项增强，并补齐发布就绪项：
+
+- 版本号升至 **1.0.0**（SKILL.md frontmatter + 本 CHANGELOG）。
+- **新增《合规与边界声明（网络访问）》小节**：本 skill 纯本地只读、零网络、零凭据、无第三方接口，不提供 / 不指导 / 不支持任何规避网络管理措施的能力；利于 SkillHub 内容审核的信任维度。
+- 审计能力不变：A 理解成本 / B 修改风险两轴 + 红黄绿严重度 + 只读审计 + 交互式清单 + Uncle Bob 气味交叉对照 + CQS 红项 + 轻量指标信号 + 增量清理（Boy Scout）。
+- 发布包剔除 LICENSE / .gitignore（SkillHub 封禁点文件），仅含 SKILL.md / README.md / CHANGELOG.md / assets / references。
+
 ## v0.2.0 (2026-09-23)
 
 对标 Uncle Bob 原则库，补充 4 项不重叠、且重新接地到第一性原理的增强：

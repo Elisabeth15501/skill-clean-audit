@@ -1,6 +1,8 @@
 # skill-clean-audit
 
-> 第一性原理 Clean Code 审计法 —— 一个**只读、可读、可复用**的 Agent Skill。
+> 第一性原理 Clean Code 审计法 —— 一个**只读、可读、可复用**的 Agent Skill。当前版本 **v1.0.0**。
+
+**合规**：纯本地只读审计，不联网、不读凭据、无第三方接口，不提供 / 不指导 / 不支持任何规避网络管理措施的能力。详见 SKILL.md《合规与边界声明》。
 
 从单根前提「**代码是写给人看的**」推导出两根判据，用红/黄/绿三档给代码打分，
 并明确允许「有意的、注释了的、范围可控的技术债」暂时存在。
@@ -38,7 +40,7 @@
 
 ## 严重度（红 / 黄 / 绿）
 
-- 🔴 **红 · 出现即脏，优先修**：`import *` 来源隐式、重复/矛盾的说明、注释退化成 changelog（满屏工单号）、模块级可变全局状态控行为、重复逻辑（DRY 违反）、裸 `except` 静默吞错。
+- 🔴 **红 · 出现即脏，优先修**：`import *` 来源隐式、重复/矛盾的说明、注释退化成 changelog（满屏工单号）、模块级可变全局状态控行为、命名与行为不一致 / 隐藏副作用（CQS 违反：函数名像查询却偷偷改状态或打印）、重复逻辑（DRY 违反）、裸 `except` 静默吞错。
 - 🟡 **黄 · 有意的债，需注释 + 范围可控**：长函数（>40 行但确内聚难拆）、魔法数字/字符串未命名、有意的 best-effort `except`（单源失败不拖垮管线）。黄 = 暂时可接受，但必须写清「为什么」且范围可控。
 - 🟢 **绿 · 出现即干净**：命名即文档、显式优于隐式、行为只由入参决定、有测试覆盖、所有 `except` 均精确。
 
@@ -50,14 +52,16 @@
 
 ```
 skill-clean-audit/
-├── SKILL.md                       # 方法论 + 审计流程 + 输出格式 + 边界声明
+├── SKILL.md                       # 方法论 + 审计流程 + 输出格式 + 边界声明 + 合规声明
 ├── LICENSE                        # MIT（开源用，不进 SkillHub 发布包）
 ├── README.md                      # 本文件
-├── .gitignore
+├── CHANGELOG.md                   # 版本记录
+├── .gitignore                     # 忽略生成的审计报告/清单
 ├── assets/
 │   └── clean_code_checklist.html  # 交互式可勾清单（审计时复制到工作区复用）
 └── references/
-    └── clean_code_audit_sample.md # 完整范例：拿 agent-analytics-report 的 main() 真审出来
+    ├── clean_code_audit_sample.md # 完整范例：拿 agent-analytics-report 的 main() 真审出来
+    └── smells_crosswalk.md        # Uncle Bob 气味 → A/B 轴 + 红黄绿 桥接表
 ```
 
 ---
