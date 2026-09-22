@@ -1,0 +1,11 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# Python caches (none expected here, but safe)
+__pycache__/
+*.pyc
+
+# SkillHub publish artifact (kept out of git; is a zip of this dir)
+*.skill
