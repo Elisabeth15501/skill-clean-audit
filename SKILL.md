@@ -53,7 +53,7 @@ description: >
 
 ## 输出格式
 
-落盘为 `<workspace>/clean_code_audit_<target>.md`，结构：
+落盘到**当前 agent 会话的工作区根目录**（即本对话打开的项目目录，例如 `C:\Users\elisa\WorkBuddy\<session>\`），文件名 `clean_code_audit_<target>.md`，结构：
 
 - 表头：审计对象（路径 + 函数/行范围 + 行数）
 - **A. 理解成本** 表：# / 清单项 / 命中(✅红·✅黄·⬜未命中·❌未达标) / 证据(行) / 说明
@@ -68,5 +68,5 @@ description: >
 
 ## 交付物
 
-- 把 **`assets/clean_code_checklist.html`** 复制到用户工作区，作为可反复使用的交互式清单。
-- 把审计报告写成 `<workspace>/clean_code_audit_<target>.md` 并 `present_files` 给用户。
+- 把 **`assets/clean_code_checklist.html`** 复制到**当前 agent 工作区根目录**（命名 `clean_code_checklist.html`），作为可反复使用的交互式清单；下次审计直接打开它打勾。
+- 把审计报告写到**当前 agent 工作区根目录** `clean_code_audit_<target>.md`，并调用 `present_files` 把该文件（及清单）呈现给用户预览。
