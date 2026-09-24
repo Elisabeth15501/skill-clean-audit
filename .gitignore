@@ -14,3 +14,7 @@ __pycache__/
 # never part of the skill itself — keep out of git to avoid accidental commits)
 clean_code_audit_*.md
 clean_code_checklist*.html
+
+# ClawHub exclusion manifest — kept UNTRACKED so it never leaks into the
+# SkillHub `git archive` export; ClawHub reads it from disk at publish time.
+.clawhubignore

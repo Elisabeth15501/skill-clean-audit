@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.1.0 (2026-09-25)
+
+ClawHub 发布前优化 + 中英对照文档（能力不变）：
+
+- **文档中英对照 / Bilingual docs**：`README.md` 全文改为中文 + 英文段落；`SKILL.md` 的 `description` 与各级 `##` 标题加英文副标题，便于国际平台（ClawHub / OpenClaw）发现与扫描。
+- **ClawHub 合规前置 / ClawHub hardening**：
+  - 新建 `.clawhubignore`，排除 `LICENSE`（与 ClawHub 强制 MIT-0 冲突，S1/S3/S5）；并把 `.clawhubignore` 加进 `.gitignore`，避免泄漏进 SkillHub 的 `git archive` 导出包。
+  - `SKILL.md`《合规与边界声明》补一行可见的 `Requirements（声明与行为一致）`：无需外部二进制 / 环境变量 / 凭据（S4 扫描器读正文校验）。
+  - 新增《维护须知》一节，写明「未来脚本若读 env / 调二进制须声明 `metadata.openclaw.requires`」红线（S1 mismatch 审核）。
+  - 源仓库 frontmatter 仍保留 `license: MIT` / `slug` / `displayName`（供 SkillHub）；这些字段由 ClawHub 导出脚本剥离，不在发布包内。
+- 多平台授权说明：GitHub / SkillHub 副本仍为 MIT（保留署名）；ClawHub 发布包按平台规则默认 MIT-0，源仓库**无需**改授 MIT-0。
+
 ## v1.0.1 (2026-09-25)
 
 隐私脱敏 + 发布路径调整（能力不变）：
