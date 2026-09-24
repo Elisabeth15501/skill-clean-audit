@@ -13,7 +13,6 @@ description: >
   「按红黄绿审代码」「clean code 审计样例」。注意：本 skill 只做可读性/可维护性的第一性原理审计，
   不做通用 PR/MR 审查（那用 code-review-assistant 或 critical-code-reviewer），
   不替代 clean-code 的写代码规范手册，也不做 lint/格式化（那用 project-code-standard）。
-  ---
   First-Principles Clean Code Audit. Derives two criteria from one root premise — "code is written for humans":
   A. Comprehension cost (how hard to read) / B. Change risk (how scary to modify) — scored red/amber/green,
   explicitly permitting intentional, documented, scoped tech debt. Audits your own WorkBuddy skill scripts or
