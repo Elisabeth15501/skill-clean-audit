@@ -83,9 +83,9 @@
     <div class="col">
       <h2>A. 理解成本 <small>读起来费不费劲</small></h2>
 
-      <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 全局搜才知道符号从哪来（<code>import *</code>、来源隐式）—— 见 agent-analytics-report 例1</label></div>
+      <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 全局搜才知道符号从哪来（<code>import *</code>、来源隐式）—— 见审计范例 例1</label></div>
       <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 同一说明出现多处且互相矛盾（死字符串/docstring 重复）—— 见例2</label></div>
-      <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 注释像 changelog：满屏 P0 / 工单号自辩，读代码先解码内部体系 —— 见 ai-weekly 例4</label></div>
+      <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 注释像 changelog：满屏 P0 / 工单号自辩，读代码先解码内部体系 —— 见审计范例 例3</label></div>
       <div class="item"><input type="checkbox"/><label><span class="sev y">黄</span> 长函数（&gt;40 行）但确实内聚、难拆 —— 确认是真难拆还是懒拆</label></div>
       <div class="item"><input type="checkbox"/><label><span class="sev y">黄</span> 魔法数字/字符串未命名 —— 命名常量即可消除</label></div>
       <div class="item"><input type="checkbox"/><label><span class="sev g">绿</span> 命名即文档，变量/函数名一眼知意图</label></div>
@@ -95,7 +95,7 @@
     <div class="col">
       <h2>B. 修改风险 <small>改起来怕不怕</small></h2>
 
-      <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 模块级可变全局状态控制行为（如 <code>_PROXY_OVERRIDE</code>）—— 见 ai-weekly 例3</label></div>
+      <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 模块级可变全局状态控制行为（如配置覆盖全局 <code>_CONFIG_OVERRIDE</code>）—— 见审计范例 例3</label></div>
       <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 重复逻辑（违反 DRY），改一处要同步多处</label></div>
       <div class="item"><input type="checkbox"/><label><span class="sev r">红</span> 裸 <code>except</code> 静默吞错，失败被藏起来下次才爆</label></div>
       <div class="item"><input type="checkbox"/><label><span class="sev y">黄</span> 有意的 best-effort <code>except</code>（单源失败不拖垮管线）—— 需注释说明，范围可控 · 见例4注记</label></div>

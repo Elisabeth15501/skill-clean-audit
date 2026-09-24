@@ -1,6 +1,6 @@
 # skill-clean-audit
 
-> 第一性原理 Clean Code 审计法 —— 一个**只读、可读、可复用**的 Agent Skill。当前版本 **v1.0.0**。
+> 第一性原理 Clean Code 审计法 —— 一个**只读、可读、可复用**的 Agent Skill。当前版本 **v1.0.1**。
 
 **合规**：纯本地只读审计，不联网、不读凭据、无第三方接口，不提供 / 不指导 / 不支持任何规避网络管理措施的能力。详见 SKILL.md《合规与边界声明》。
 
@@ -60,7 +60,7 @@ skill-clean-audit/
 ├── assets/
 │   └── clean_code_checklist.html  # 交互式可勾清单（审计时复制到工作区复用）
 └── references/
-    ├── clean_code_audit_sample.md # 完整范例：拿 agent-analytics-report 的 main() 真审出来
+    ├── clean_code_audit_sample.md # 完整范例：用合成示例脚本 demo-skill 的 main() 真审出来（片段自带行号，可逐行核对）
     └── smells_crosswalk.md        # Uncle Bob 气味 → A/B 轴 + 红黄绿 桥接表
 ```
 
@@ -72,7 +72,7 @@ skill-clean-audit/
 
 把整个目录放进 `~/.workbuddy/skills/skill-clean-audit/`，对话中说：
 
-> 「用第一性原理审一下 `~/.workbuddy/skills/ai-weekly/scripts/generate_site.py`」
+> 「用第一性原理审一下 `~/.workbuddy/skills/demo-skill/scripts/aggregate.py`」
 
 或任一触发词：`理解成本/修改风险`、`clean code 审计`、`审计我的 Skill 脚本`、`按红黄绿审代码`。
 

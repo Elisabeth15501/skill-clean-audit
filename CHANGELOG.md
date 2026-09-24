@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.1 (2026-09-25)
+
+隐私脱敏 + 发布路径调整（能力不变）：
+
+- 重写 `references/clean_code_audit_sample.md`：审计样例从真实项目 `agent-analytics-report` 的内部代码，改为自带行号、可逐行核对的**合成示例脚本** `demo-skill/scripts/aggregate.py`，不再泄露任何真实项目。
+- `SKILL.md` / `README.md` 中的 `agent-analytics-report`、`ai-weekly` 命名引用改为合成示例；输出路径里的用户名绝对路径改为 `~/WorkBuddy/<session>/`。
+- `assets/clean_code_checklist.html` 三处点名引用（`agent-analytics-report` 例1 / `ai-weekly` 例4 / `_PROXY_OVERRIDE` 例3）改为「审计范例」+ 通用占位 `_CONFIG_OVERRIDE`。
+- skill 源目录从 `~/.workbuddy/skills/` 迁至 `C:\Users\elisa\dev\skill-clean-audit`（仅路径变更，方法/产出不变）。
+
 ## v1.0.0 (2026-09-23)
 
 首个稳定版（stable）。整合 v0.1.0 第一性原理方法论与 v0.2.0 对标 Uncle Bob 的四项增强，并补齐发布就绪项：

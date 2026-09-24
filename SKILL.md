@@ -2,7 +2,7 @@
 name: skill-clean-audit
 slug: skill-clean-audit
 displayName: 第一性原理 Clean Code 审计
-version: 1.0.0
+version: 1.0.1
 license: MIT
 description: >
   第一性原理 clean code 审计法。从单根前提「代码是写给人看的」推导出两根判据——
@@ -72,11 +72,11 @@ description: >
 2. **逐项对照清单**：对 `assets/clean_code_checklist.html` 每一项，判断在目标代码里是否命中。常见 smell 的标准命名（Rigidity/Fragility/Opacity…）对照见 **`references/smells_crosswalk.md`**，便于把发现标准化。
 3. **带证据打勾**：每条命中必须给 `文件:行号` 和一句话「它抬高了 A 还是 B、怎么抬的」。无证据的直觉不打勾。
 4. **数红黄绿**：用清单底部计数器或手算；指标信号（上节）可辅助定位，但不计入严重度。
-5. **出报告**：格式见下方「输出格式」，完整范例见 **`references/clean_code_audit_sample.md`**（那是拿 `agent-analytics-report/collect_usage_data.py` 的 `main()` 真审出来的样例，照它的结构写）。
+5. **出报告**：格式见下方「输出格式」，完整范例见 **`references/clean_code_audit_sample.md`**（那是一份用合成示例脚本 `demo-skill/scripts/aggregate.py` 的 `main()` 真审出来的样例，照它的结构写；样例片段自带行号、可逐行核对，不对应任何真实项目）。
 
 ## 输出格式
 
-落盘到**当前 agent 会话的工作区根目录**（即本对话打开的项目目录，例如 `C:\Users\elisa\WorkBuddy\<session>\`），文件名 `clean_code_audit_<target>.md`，结构：
+落盘到**当前 agent 会话的工作区根目录**（即本对话打开的项目目录，例如 `~/WorkBuddy/<session>/`），文件名 `clean_code_audit_<target>.md`，结构：
 
 - 表头：审计对象（路径 + 函数/行范围 + 行数）
 - **A. 理解成本** 表：# / 清单项 / 命中(✅红·✅黄·⬜未命中·❌未达标) / 证据(行) / 说明
