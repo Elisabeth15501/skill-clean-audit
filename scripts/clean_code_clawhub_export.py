@@ -8,7 +8,7 @@ What it does (per clean_code_clawhub_publish_plan.md, sources S1-S5):
   2. Apply .clawhubignore (LICENSE, *.skill, __pycache__/ ...)
   3. Drop README.md (S2: no README inside the skill folder)
   4. Strip frontmatter fields license:/slug:/displayName: (S1/S5)
-  5. Sanitize any C:\Users\<user> absolute path -> ~/  (privacy)
+  5. Sanitize any C:\\Users\\<user> absolute path -> ~/  (privacy)
   6. Print an audit trail of every transformation
 
 The SOURCE repo is never modified. Only the --out directory is written.
