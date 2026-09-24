@@ -121,7 +121,7 @@ The method is platform-agnostic — apply its two criteria + red/amber/green to 
 
 ## 许可证 / License
 
-[MIT](LICENSE) © 2026 Elisabeth15501 (Chen Yanting)
+MIT © 2026 Elisabeth15501
 
 > 多平台发布说明 / Multi-platform note: 本仓库（GitHub / SkillHub）以 MIT 分发；ClawHub 发布包按平台规则默认套用 **MIT-0**（由 `.clawhubignore` 排除 LICENSE 并剥离 frontmatter 的 `license` 字段）。
 > This repo (GitHub / SkillHub) is distributed under MIT; the ClawHub package defaults to **MIT-0** per platform policy (LICENSE excluded via `.clawhubignore`, `license` field stripped from frontmatter).

@@ -8,7 +8,7 @@ What it does (per clean_code_clawhub_publish_plan.md, sources S1-S5):
   2. Apply .clawhubignore (LICENSE, *.skill, __pycache__/ ...)
   3. Drop README.md (S2: no README inside the skill folder)
   4. Strip frontmatter fields license:/slug:/displayName: (S1/S5)
-  5. Sanitize any C:\\Users\\elisa absolute path -> ~/  (privacy)
+  5. Sanitize any C:\Users\<user> absolute path -> ~/  (privacy)
   6. Print an audit trail of every transformation
 
 The SOURCE repo is never modified. Only the --out directory is written.
@@ -18,12 +18,16 @@ Usage:
 """
 import argparse
 import fnmatch
+import getpass
 import os
 import re
 import shutil
 
 STRIP_FRONTMATTER_FIELDS = ("license:", "slug:", "displayName:")
-USERNAME_PATH_RE = re.compile(r"C:[\\/]Users[\\/]elisa(?=[\\/]|$)")
+# Sanitize the *current* user's home path (C:\Users\<user>) dynamically — no hardcoded
+# username literal in source, so the dev machine's name never leaks into the publish package.
+_USER = getpass.getuser()
+USERNAME_PATH_RE = re.compile(r"C:[\\/]Users[\\/]" + re.escape(_USER) + r"(?=[\\/]|$)")
 README_NAME = "README.md"
 
 
@@ -136,7 +140,7 @@ def main() -> None:
                     log.append("STRIP frontmatter: license:/slug:/displayName:  (S1/S5)")
                 if USERNAME_PATH_RE.search(txt):
                     txt = sanitize_username(txt)
-                    log.append(f"SANITIZE path: C:\\Users\\elisa -> ~/  in {rel}")
+                    log.append(f"SANITIZE path: C:\\Users\\<user> -> ~/  in {rel}")
                 with open(dst_file, "w", encoding="utf-8", newline="") as f:
                     f.write(txt)
             else:

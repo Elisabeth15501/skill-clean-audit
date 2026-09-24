@@ -22,6 +22,14 @@ description: >
   Note: this skill does first-principles readability/maintainability audit only — not generic PR/MR review
   (use code-review-assistant / critical-code-reviewer), not a style handbook (use clean-code),
   and not lint/format (use project-code-standard).
+summary: 第一性原理 Clean Code 审计法——只读审计你自己的 WorkBuddy Skill 脚本 / Python 代码，用「理解成本 / 修改风险」两轴 + 红黄绿，产出带证据 (file:line) 的可勾选报告；方法论从单根前提推导，不依赖任何外部二进制或凭据。
+tags:
+  - clean-code
+  - code-audit
+  - readability
+  - maintainability
+  - static-analysis
+  - skill-tooling
 ---
 
 # 第一性原理 Clean Code 审计 / First-Principles Clean Code Audit
