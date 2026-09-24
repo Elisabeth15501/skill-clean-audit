@@ -11,6 +11,7 @@ ClawHub 发布前优化 + 中英对照文档（能力不变）：
   - 新增《维护须知》一节，写明「未来脚本若读 env / 调二进制须声明 `metadata.openclaw.requires`」红线（S1 mismatch 审核）。
   - 源仓库 frontmatter 仍保留 `license: MIT` / `slug` / `displayName`（供 SkillHub）；这些字段由 ClawHub 导出脚本剥离，不在发布包内。
 - 多平台授权说明：GitHub / SkillHub 副本仍为 MIT（保留署名）；ClawHub 发布包按平台规则默认 MIT-0，源仓库**无需**改授 MIT-0。
+- **skillhub-gate 实跑修到 PASS**：补 `SKILL.md` frontmatter 推荐字段 `summary` / `tags`（根因为中英对照版 description 折叠块内误置 `---` 视觉分隔线导致 frontmatter 被提前闭合）；`README.md` 去真实用户名；`scripts/clean_code_clawhub_export.py` 脱敏正则改动态读取当前用户（`getpass.getuser()`），源码不再含硬编码用户名路径。对「剥离封禁文件后的发布包」跑门禁结论 `PASS (exit 0, 0 问题)`。
 
 ## v1.0.1 (2026-09-25)
 
