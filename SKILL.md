@@ -2,7 +2,7 @@
 name: skill-clean-audit
 slug: skill-clean-audit
 displayName: 第一性原理 Clean Code 审计
-version: 1.1.0
+version: 1.1.1
 license: MIT
 description: >
   第一性原理 clean code 审计法。从单根前提「代码是写给人看的」推导出两根判据——

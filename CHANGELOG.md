@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.1 (2026-09-28)
+
+多平台发布对齐（能力不变，内容等同 v1.1.0 + ClawHub 审核通过记录）：
+
+- 版本号对齐：GitHub Release / SkillHub / ClawHub 三端统一为 v1.1.1。SkillHub 平台禁止同一版本号重复提交（v1.1.0 已于 2026-09-25 提交且审核中），故 bump 至 v1.1.1 重新提交。
+- ClawHub 侧：v1.1.0 已于 2026-09-28 审核通过、恢复 Visible；本次以 v1.1.1 对齐更新。
+- 发布包与 v1.1.0 一致：SKILL.md 双语 frontmatter、渐进式披露（assets/references/scripts）、MIT（SkillHub）/ MIT-0（ClawHub）。
+
 ## v1.1.0 (2026-09-25)
 
 ClawHub 发布前优化 + 中英对照文档（能力不变）：
