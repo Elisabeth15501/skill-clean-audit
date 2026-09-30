@@ -2,7 +2,7 @@
 name: skill-clean-audit
 slug: skill-clean-audit
 displayName: 第一性原理 Clean Code 审计
-version: 1.1.1
+version: 1.2.0
 license: MIT
 description: >
   第一性原理 clean code 审计法。从单根前提「代码是写给人看的」推导出两根判据——
@@ -61,6 +61,8 @@ An audit methodology + a concrete artifact. Pokes code with two criteria, ticks 
 本 skill 的价值在三点，现有 skill 都没有：① 规则是**推导**出来的不是给定的；② 用**成本/风险**两轴而非类别桶；③ 允许**有意的债**。
 Three things no existing skill does: ① rules are *derived*, not given; ② a cost/risk two-axis model, not category buckets; ③ permits *intentional debt*.
 
+- **路由提示 / Routing**：给单个文件或函数 → 直接走下方「审计流程」；给整个 Skill 目录 → 建议逐个脚本审，优先挑最常被修改的那几个（修改风险本就高）。Give one file/function → go straight to Audit Flow; give a whole skill dir → audit script by script, prioritizing the most-frequently-changed ones (high change risk by nature).
+
 ## 第一性原理推导 / First-Principles Derivation
 
 1. **根前提 / Root premise**：代码是写给人看的。机器只认语法对不对，不在乎命名/长度/注释；代码真正的生命周期在「被另一个人（含未来的你）阅读、修改、维护」的那无数次里。
@@ -108,6 +110,7 @@ The numbers below are only probes for "worth a closer look" — **not automatic 
 ## 审计流程 / Audit Flow
 
 1. **读目标文件 / Read the target**：把要审的函数/模块完整读出来，不要凭印象。Read the whole function/module; don't audit from memory.
+   - 若用户未指定具体文件/函数，**先追问再审**：① 要审哪个文件或目录？② 关注哪个函数/模块（还是整体）？不凭印象审计用户未指定的代码。If the user gives no target, ask which file/function before auditing — never audit unspecified code.
 2. **逐项对照清单 / Check against the list**：对 `assets/clean_code_checklist.html` 每一项，判断在目标代码里是否命中。常见 smell 的标准命名（Rigidity/Fragility/Opacity…）对照见 **`references/smells_crosswalk.md`**，便于把发现标准化。
    For each item in `assets/clean_code_checklist.html`, judge whether it hits. Standard smell names (Rigidity/Fragility/Opacity…) crosswalk: **`references/smells_crosswalk.md`**.
 3. **带证据打勾 / Tick with evidence**：每条命中必须给 `文件:行号` 和一句话「它抬高了 A 还是 B、怎么抬的」。无证据的直觉不打勾。
@@ -116,6 +119,19 @@ The numbers below are only probes for "worth a closer look" — **not automatic 
    Use the checklist counter or count by hand; metric signals help locate but don't count toward severity.
 5. **出报告 / Emit report**：格式见下方「输出格式」，完整范例见 **`references/clean_code_audit_sample.md`**（那是一份用合成示例脚本 `demo-skill/scripts/aggregate.py` 的 `main()` 真审出来的样例，照它的结构写；样例片段自带行号、可逐行核对，不对应任何真实项目）。
    Format below; full sample: **`references/clean_code_audit_sample.md`** (a real audit of synthetic `demo-skill/scripts/aggregate.py`; snippet is line-numbered, checkable, maps to no real project).
+
+## 异常与降级 / Exceptions & Degradation
+
+- 文件不存在 / 无读权限 → 直接说明，请用户换目标；不猜测、不降级去审别的文件。File missing / no read permission → say so, ask for a different target; never silently audit another file.
+- 非代码文件（图片 / 二进制 / 数据）→ 拒绝审计，说明本 skill 只审源码文本。Non-source file (image / binary / data) → refuse, explain scope (source text only).
+- 超大文件（>2000 行）→ 建议先聚焦某个函数/模块，避免一次性扫全文件导致严重度失真。Very large file (>2000 lines) → suggest scoping to one function/module first; avoid a full-file sweep that distorts severity.
+- 网络 / 凭据：N/A。本 skill 不联网、不读凭据（见《合规与边界声明》），故无「海外源不可达需降级」场景。Network/credentials: N/A — this skill is offline and reads no secrets, so no "overseas source unreachable → degrade" case.
+
+## 输入要求 / Input Requirements
+
+- 接受：Python（.py）为主；WorkBuddy Skill 脚本常含 .py / .js / .ts（SKILL.md / references/ / scripts/）；以及任何「人类可读的源代码文本」。Accepts Python (.py) primarily; skill scripts often .py / .js / .ts; any human-readable source text.
+- 不接受：二进制 / 图片 / 数据文件（.png / 数据型 .json / .xlsx 等）、加密或混淆代码——本 skill 只审源码文本。Not for binaries / images / data files (.png, data .json, .xlsx…) or obfuscated code — source text only.
+- 覆盖行为 / Overwrite：每份报告是新文件 `clean_code_audit_<target>.md`，**不覆盖**已有同名报告；清单 `clean_code_checklist.html` 为可复用副本，覆盖式写入工作区根目录。Each report is a new file `clean_code_audit_<target>.md`, **never overwrites** an existing same-name report; the checklist `clean_code_checklist.html` is a reusable copy written over at workspace root.
 
 ## 输出格式 / Output Format
 
