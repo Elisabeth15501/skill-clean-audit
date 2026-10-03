@@ -2,7 +2,7 @@
 name: skill-clean-audit
 slug: skill-clean-audit
 displayName: 第一性原理 Clean Code 审计
-version: 1.2.0
+version: 1.3.0
 license: MIT
 description: >
   第一性原理 clean code 审计法。从单根前提「代码是写给人看的」推导出两根判据——
@@ -17,7 +17,7 @@ description: >
   A. Comprehension cost (how hard to read) / B. Change risk (how scary to modify) — scored red/amber/green,
   explicitly permitting intentional, documented, scoped tech debt. Audits your own WorkBuddy skill scripts or
   Python code, emitting an evidence-backed (file:line) checklist report. Triggers: "audit code with first principles",
-  "comprehension/change risk", "clean code audit", "audit my skill scripts". Read-only: emits findings, never edits.
+  "comprehension/change risk", "clean code audit", "audit my skill scripts". Read-only on the code under audit — never modifies the source being reviewed; writes its own local report/checklist artifacts only (disclosed side effect).
   Note: this skill does first-principles readability/maintainability audit only — not generic PR/MR review
   (use code-review-assistant / critical-code-reviewer), not a style handbook (use clean-code),
   and not lint/format (use project-code-standard).
@@ -35,8 +35,8 @@ tags:
 
 ## 合规与边界声明（网络访问）/ Compliance & Boundary Statement (Network Access)
 
-- 本 skill **不发起任何网络请求**，不调用任何第三方 / 海外 API，不读取任何凭据、密钥或环境变量，仅读取用户**显式指定**的本地代码文件做只读审计。
-  This skill makes **no network requests**, calls no third-party / overseas API, reads no credentials, secrets, or env vars; it only reads user-**explicitly-specified** local code files for a read-only audit.
+  - 本 skill **不发起任何网络请求**，不调用任何第三方 / 海外 API，不读取任何凭据、密钥或环境变量；它**只读被审计的*代码*本身**（从不修改被审源码），并额外把自身产出（审计报告 + 清单）写到工作区——这是它唯一会做的写入，且在此声明（见下方 Trust 红线）。
+  This skill makes **no network requests**, calls no third-party / overseas API, reads no credentials, secrets, or env vars; it **reads only the *code under audit* (never modifies the source being reviewed)** and additionally writes its own output artifacts (audit report + checklist) to the workspace — the only write it performs, disclosed here (see the Trust red line below).
 - **不提供、不指导、不支持任何规避网络管理措施的能力**；不使用非公开接口、不破解访问控制、不伪造身份绕过鉴权。
   Provides / instructs / supports **no means to circumvent network-management measures**; no private interfaces, no access-control bypass, no identity spoofing.
 - 无「数据源 / 海外源」概念——全部输入来自本地文件，故「海外源不可达需降级」场景不适用（N/A）。
@@ -45,6 +45,37 @@ tags:
   If the runtime forbids network, this skill is unaffected (it never goes online).
 - **Requirements（声明与行为一致 / declared == behaved）**：无需任何外部二进制（python/git/gh/node/npx/shell 均不调用）、无需任何环境变量、无需任何凭据。审计纯靠阅读+推理，无任何运行时依赖。
   **Requirements (declared == behaved)**: requires no external binaries (calls no python/git/gh/node/npx/shell), no env vars, no credentials. Audit is pure read+reason — zero runtime dependencies.
+
+## 语言选择 / Language
+
+本 skill 的全部产物（交互清单、审计报告、范例、FAQ）均提供**中文版与英文版**。触发时先定语言模式，再开工——**语言绝不是隐藏默认值**。
+
+This skill ships every artifact (interactive checklist, audit report, samples, FAQ) in **both Chinese and English**. Pick the language mode before starting — **language is never a hidden default**.
+
+**三种模式 / Three modes**：
+
+- **`auto`**（默认）：按你与 Agent 交互所用的语言自动判定并切换——消息为英文 → 英文产物；中文 → 中文产物；中英混排以你的主语言为准；纯代码 / 路径、无自然语言 → 主动问你「报告用中文还是英文？」。
+  **`auto`** (default): follows the language of your exchange with the agent — English message → English artifacts; Chinese → Chinese; mixed → your dominant language; pure code / path with no natural language → ask "Chinese or English report?".
+- **`zh`**：强制中文——所有产物一律中文，**忽略**交互语言。
+  **`zh`**: force Chinese — all artifacts in Chinese, **ignoring** the exchange language.
+- **`en`**：强制英文——所有产物一律英文，**忽略**交互语言。
+  **`en`**: force English — all artifacts in English, **ignoring** the exchange language.
+
+**判定优先级 / Resolution order**：你显式说 `zh` / `en` > 交互语言推断 `auto` > 兜底询问。**整轮审计不中途切换**（避免报告半中半英）；下一轮可重新判定。
+
+**Resolution priority**: your explicit `zh`/`en` > inferred `auto` from exchange language > ask. **No mid-audit switch** (avoids mixed-language report); re-resolved next round.
+
+**产物映射 / Artifact mapping**（按模式选文件）：
+
+| 产物 | `zh` | `en` |
+|---|---|---|
+| 交互清单 | `assets/clean_code_checklist.html` | `assets/clean_code_checklist.en.html` |
+| 审计样例 | `references/clean_code_audit_sample.md` | `references/clean_code_audit_sample.en.md` |
+| 复杂样例 | `references/clean_code_audit_sample_complex.md` | `references/clean_code_audit_sample_complex.en.md` |
+| FAQ | `references/faq.md` | `references/faq.en.md` |
+
+> 缺失某英文版时 fallback 到中文并在报告中注明「该范例暂无英文版」，**不静默给错语言**。
+> If an English version is missing, fall back to Chinese and note "no English version yet" in the report — **never silently give the wrong language**.
 
 ## 它是什么 / 不是什么 / What it is / is not
 
@@ -138,6 +169,9 @@ The numbers below are only probes for "worth a closer look" — **not automatic 
 落盘到**当前 agent 会话的工作区根目录**（即本对话打开的项目目录，例如 `~/WorkBuddy/<session>/`），文件名 `clean_code_audit_<target>.md`，结构：
 Write to the **current agent session's workspace root** (the opened project dir, e.g. `~/WorkBuddy/<session>/`), filename `clean_code_audit_<target>.md`, structure:
 
+- 报告标题与表头使用用户所选语言（`zh` / `en` / `auto` 判定结果）；样例结构见 `references/clean_code_audit_sample.md`（中文）或 `references/clean_code_audit_sample.en.md`（英文）。
+  Report title and table headers use the chosen language (`zh` / `en` / `auto` result); sample structure: `references/clean_code_audit_sample.md` (zh) or `references/clean_code_audit_sample.en.md` (en).
+
 - 表头：审计对象（路径 + 函数/行范围 + 行数） / Header: target (path + function/line range + line count)
 - **A. 理解成本 / Comprehension cost** 表：# / 清单项 / 命中(✅红·✅黄·⬜未命中·❌未达标) / 证据(行) / 说明
 - **B. 修改风险 / Change risk** 表：同上 / same as above
@@ -168,8 +202,8 @@ Closing note: fix all red; keep amber if "comment + scoped"; green means clean. 
 
 ## 交付物 / Deliverables
 
-- 把 **`assets/clean_code_checklist.html`** 复制到**当前 agent 工作区根目录**（命名 `clean_code_checklist.html`），作为可反复使用的交互式清单；下次审计直接打开它打勾。
-  Copy **`assets/clean_code_checklist.html`** to the **workspace root** (as `clean_code_checklist.html`) for reuse; open it next audit to tick.
+- 把交互清单复制到**当前 agent 工作区根目录**作为可反复使用的副本：中文 → **`assets/clean_code_checklist.html`**（命名 `clean_code_checklist.html`）；英文 → **`assets/clean_code_checklist.en.html`**（命名 `clean_code_checklist.en.html`）；按《语言选择》的模式选。下次审计直接打开它打勾。
+  Copy the interactive checklist to the **workspace root** for reuse: Chinese → **`assets/clean_code_checklist.html`** (as `clean_code_checklist.html`); English → **`assets/clean_code_checklist.en.html`** (as `clean_code_checklist.en.html`); pick per the Language mode. Open it next audit to tick.
 - 把审计报告写到**当前 agent 工作区根目录** `clean_code_audit_<target>.md`，并调用 `present_files` 把该文件（及清单）呈现给用户预览。
   Write the audit report to the **workspace root** `clean_code_audit_<target>.md` and call `present_files` to preview it (and the checklist) for the user.
 - 生成物（`clean_code_audit_*.md` / `clean_code_checklist*.html`）已被仓库 `.gitignore` 忽略，不进版本控制。
@@ -177,7 +211,9 @@ Closing note: fix all red; keep amber if "comment + scoped"; green means clean. 
 
 ## 维护须知 / Maintenance Notes
 
-- 若今后在 `references/` 新增会读环境变量或调用二进制的脚本，必须同步在 `metadata.openclaw.requires.env` / `requires.bins` 声明（ClawHub 的 mismatch 审核红线）。当前本 skill 无任何此类依赖。
+  - 若今后在 `references/` 新增会读环境变量或调用二进制的脚本，必须同步在 `metadata.openclaw.requires.env` / `requires.bins` 声明（ClawHub 的 mismatch 审核红线）。当前本 skill 无任何此类依赖。
   If you later add a script that reads env vars or calls binaries, declare it in `metadata.openclaw.requires.env` / `requires.bins` (ClawHub's mismatch-audit red line). This skill has none today.
+  - **声明与行为必须一致（Trust 红线）**：本 skill 的「只读」特指*被审计的代码*——它从不改动被审源码，但会写自身报告/清单产物。任何 frontmatter / 合规段的描述都须与此一致；若未来新增会写其他路径或读凭据的脚本，必须同步在 `metadata.openclaw.requires` 声明，避免 ClawHub 的「声明-行为 mismatch」审核命中。
+    **Declared == behaved (Trust red line)**: "read-only" here means the *code under audit* — this skill never modifies the source it reviews, but it does write its own report/checklist artifacts. Every frontmatter / compliance statement must match this; if a future script writes other paths or reads credentials, declare it in `metadata.openclaw.requires` to avoid ClawHub's declaration-behavior mismatch audit.
 - 多平台发布：源仓库 frontmatter 保留 `license: MIT` 供 SkillHub；ClawHub 导出副本由发布脚本剥离 `license` 字段并排除 LICENSE（见 `.clawhubignore`）。
   Multi-platform: the source keeps `license: MIT` for SkillHub; the ClawHub export strips the `license` field and excludes LICENSE (see `.clawhubignore`).
