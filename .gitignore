@@ -10,10 +10,14 @@ __pycache__/
 # SkillHub publish artifact (kept out of git; is a zip of this dir)
 *.skill
 
-# Generated audit artifacts (produced by this skill into the agent workspace;
-# never part of the skill itself — keep out of git to avoid accidental commits)
-clean_code_audit_*.md
-clean_code_checklist*.html
+# Generated audit artifacts — these are produced by the skill into the AGENT
+# WORKSPACE ROOT (e.g. ~/WorkBuddy/<session>/), never inside this repo. The
+# leading slash anchors the pattern to the repo root so it does NOT swallow this
+# skill's own bundled files: assets/clean_code_checklist*.html and
+# references/clean_code_audit_sample*.md (samples/checklist ship with the skill
+# and must stay tracked).
+/clean_code_audit_*.md
+/clean_code_checklist*.html
 
 # ClawHub exclusion manifest — kept UNTRACKED so it never leaks into the
 # SkillHub `git archive` export; ClawHub reads it from disk at publish time.
