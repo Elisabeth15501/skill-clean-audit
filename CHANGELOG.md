@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.3.0 (2026-10-04)
+
+双依据优化：SkillHub TRACE 评测（4.8/5 优+）+ ClawHub SkillSpector 安全扫描（v1.2.0，6 条 finding 全为「声明/行为不符」与「语言强制」软问题，无恶意代码）。按 `clean_code_v1.3.0_plan.md` 分 P0/P1/P2 落地：
+
+- **P0 · 安全扫描驱动**：① 精确化「只读」措辞（frontmatter description + 合规段 + 维护须知 Trust 红线）——「只读=只读被审计代码，只写自身产物(已声明)」，直接消 2 条 Medium 读-写 mismatch；② 语言选择 + 英文版产物：新增《语言选择》小节（auto/zh/en 三模式 + 产物映射），新增 `assets/clean_code_checklist.en.html` 与 `references/clean_code_audit_sample.en.md`，交付物/输出格式按语言映射，用户可明确选中文或英文。
+- **P1 · 评测驱动**：③ FAQ——新建 `references/faq.md` + `references/faq.en.md` 集中解答 7 个高频问题（回应 C·反模式与FAQ 4.0）；④ 异常与降级升级——「文件缺失/无权限」改为 3 步行动指引（回应 R·异常处理 4.0）；⑤ 新增 `scripts/metric_probe.py`（纯 stdlib / `ast` 解析，只提示不判级，5 项指标信号，回应 E·开箱即用度 4.5 与总评「无自动化脚本」）；`.clawhubignore` 收窄为只排除导出脚本本身，使 metric_probe 能进 ClawHub 包。
+- **P2 · 打磨**：⑥ 复杂场景样例——`references/clean_code_audit_sample_complex.md` + `.en.md`（类/继承/异步/全局态合成样本，演示 B 轴优先亮红灯）；⑦ 顶部《30 秒上手》5 行 Quick Start（回应 C·渐进式披露「章节多需耐心」）；⑧ 大文件分段兜底（>500 行按 ~500 行/段分段审 + 跨段汇总）。
+- **双语交付**：README 新增 `README.en.md`，全部产物（清单/样例/FAQ/README）均提供中英文版；语言模式 auto/zh/en 由用户在触发时显式或按消息语言判定。
+- 验收：ClawHub 重扫应消解 2 条 Medium mismatch + 4 条自然语言项；TRACE 目标 R→4.8+/C→4.8+/E→4.9+/总评≥4.9；`skillhub-gate` 对导出副本 PASS。
+
 ## v1.2.0 (2026-09-30)
 
 基于 `clean_code_skill_quality_eval.md`（对照 CSDN 8 维度框架、v1.1.1 评级 A / 8.80）的扣分点做文档侧优化，只修 D2/D4/D5，守住 D8 聚焦不蔓延（本次纯文档增改，不引入新依赖/网络，ClawHub 扫描应稳定通过）：

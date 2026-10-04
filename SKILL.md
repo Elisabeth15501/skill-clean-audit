@@ -33,6 +33,16 @@ tags:
 
 # 第一性原理 Clean Code 审计 / First-Principles Clean Code Audit
 
+## 30 秒上手 / Quick Start（5 行）
+
+1. 给我**一个文件 / 函数 / 目录**当审计目标（没给 → 我会先问你审哪个）。Give me **one file / function / dir** as the target (none given → I ask first).
+2. 选语言：说 `zh` / `en` 强制，或不说走 `auto`（按你消息语言判定）。Pick language: say `zh`/`en` to force, or leave it for `auto` (follows your message).
+3. 我**只读**目标，按「理解成本 / 修改风险」两轴 + 红黄绿打分，每项带 `文件:行` 证据。I **read-only** the target, score via comprehension/change axes + red/amber/green, each item with `file:line` evidence.
+4. 产出：报告 `clean_code_audit_<target>.md` + 可勾选清单（中文 `clean_code_checklist.html` / 英文 `clean_code_checklist.en.html`）。Output: report `clean_code_audit_<target>.md` + tickable checklist (zh `clean_code_checklist.html` / en `clean_code_checklist.en.html`).
+5. 想快筛疑点：可跑 `scripts/metric_probe.py --src <file>`（纯 stdlib，只提示不判级）。Quick scan: run `scripts/metric_probe.py --src <file>` (pure stdlib; hints only, no grading).
+
+> 完整流程见下方「审计流程」；边界 / FAQ 见 `references/faq.md`（中文）或 `references/faq.en.md`（英文）。Full flow below under "Audit Flow"; boundaries / FAQ in `references/faq.md` (zh) or `references/faq.en.md` (en).
+
 ## 合规与边界声明（网络访问）/ Compliance & Boundary Statement (Network Access)
 
   - 本 skill **不发起任何网络请求**，不调用任何第三方 / 海外 API，不读取任何凭据、密钥或环境变量；它**只读被审计的*代码*本身**（从不修改被审源码），并额外把自身产出（审计报告 + 清单）写到工作区——这是它唯一会做的写入，且在此声明（见下方 Trust 红线）。
@@ -43,8 +53,8 @@ tags:
   No "data source / overseas source" concept — all input is local, so "overseas source unreachable → degrade" is N/A.
 - 若运行环境禁止网络，本 skill 行为完全不受影响（它本就不联网）。
   If the runtime forbids network, this skill is unaffected (it never goes online).
-- **Requirements（声明与行为一致 / declared == behaved）**：无需任何外部二进制（python/git/gh/node/npx/shell 均不调用）、无需任何环境变量、无需任何凭据。审计纯靠阅读+推理，无任何运行时依赖。
-  **Requirements (declared == behaved)**: requires no external binaries (calls no python/git/gh/node/npx/shell), no env vars, no credentials. Audit is pure read+reason — zero runtime dependencies.
+-   **Requirements（声明与行为一致 / declared == behaved）**：核心审计零外部二进制（python/git/gh/node/npx/shell 均不调用）、零环境变量、零凭据、零运行时依赖。可选的辅助脚本 **`scripts/metric_probe.py`** 需 Python 3，但也是纯标准库、零网络、零凭据、只读——不是运行时依赖，不调用即不影响审计。
+  **Requirements (declared == behaved)**: the core audit needs no external binaries (calls no python/git/gh/node/npx/shell), no env vars, no credentials, zero runtime deps. The optional helper **`scripts/metric_probe.py`** needs Python 3 but is also pure stdlib, offline, no credentials, read-only — not a runtime dependency; the audit works without invoking it.
 
 ## 语言选择 / Language
 
@@ -93,6 +103,7 @@ An audit methodology + a concrete artifact. Pokes code with two criteria, ticks 
 Three things no existing skill does: ① rules are *derived*, not given; ② a cost/risk two-axis model, not category buckets; ③ permits *intentional debt*.
 
 - **路由提示 / Routing**：给单个文件或函数 → 直接走下方「审计流程」；给整个 Skill 目录 → 建议逐个脚本审，优先挑最常被修改的那几个（修改风险本就高）。Give one file/function → go straight to Audit Flow; give a whole skill dir → audit script by script, prioritizing the most-frequently-changed ones (high change risk by nature).
+- **常见疑问 / FAQ**：边界、产物写到哪、支持语言、是否联网等高频问题集中见 **`references/faq.md`**（中文）或 **`references/faq.en.md`**（英文），按《语言选择》模式选。Common questions (boundaries, where reports go, supported languages, network needs) are centralized in **`references/faq.md`** (zh) or **`references/faq.en.md`** (en), picked per the Language mode.
 
 ## 第一性原理推导 / First-Principles Derivation
 
@@ -138,6 +149,8 @@ The numbers below are only probes for "worth a closer look" — **not automatic 
 > 重申 / Restated：指标命中 ≠ 脏。若它能用「注释说清 + 范围可控」解释，且真降低了理解/修改成本，仍是干净的。指标只为节省你逐行扫的时间。
 > Metric hit ≠ dirty. If explained by "comment + scoped" and it truly lowers cost, it stays clean. Metrics only save you line-by-line scanning time.
 
+可用 **`scripts/metric_probe.py`**（纯 Python 标准库）自动探测上述 5 项信号，输出带 `file:line` 的清单，便于快速定位疑点；脚本**只提示不判级**，最终仍由你按 A/B 两轴人工判。You can run **`scripts/metric_probe.py`** (pure Python stdlib) to auto-detect these 5 signals with `file:line` references; the script *hints only, never grades* — you still judge via the A/B axes.
+
 ## 审计流程 / Audit Flow
 
 1. **读目标文件 / Read the target**：把要审的函数/模块完整读出来，不要凭印象。Read the whole function/module; don't audit from memory.
@@ -153,9 +166,9 @@ The numbers below are only probes for "worth a closer look" — **not automatic 
 
 ## 异常与降级 / Exceptions & Degradation
 
-- 文件不存在 / 无读权限 → 直接说明，请用户换目标；不猜测、不降级去审别的文件。File missing / no read permission → say so, ask for a different target; never silently audit another file.
+- 文件不存在 / 无读权限 → **给 3 步自查指引，不要只回「读不到」**：① 核对路径拼写与相对/绝对路径（`./` 相对的是工作区根目录，不是被审文件所在目录）；② 确认文件确实存在——列出目录验证（`ls` / 文件管理器）；③ 请用户贴正确路径，或把文件放进工作区根目录再试。**不猜测、不降级去审别的文件**。File missing / no read permission → **give a 3-step self-check, don't just say "can't read"**: ① check path spelling and relative/absolute form (`./` is the workspace root, not the audited file's dir); ② confirm the file exists — list the directory to verify; ③ ask the user to paste the correct path, or drop the file into the workspace root and retry. Never silently audit another file.
 - 非代码文件（图片 / 二进制 / 数据）→ 拒绝审计，说明本 skill 只审源码文本。Non-source file (image / binary / data) → refuse, explain scope (source text only).
-- 超大文件（>2000 行）→ 建议先聚焦某个函数/模块，避免一次性扫全文件导致严重度失真。Very large file (>2000 lines) → suggest scoping to one function/module first; avoid a full-file sweep that distorts severity.
+- 超大文件（>500 行）→ 若用户要整文件审，按 **~500 行一段**分段审：每段独立打红黄绿，最后给「跨段汇总」，避免一次性扫全文件导致严重度失真或上下文溢出。**不**为凑分段而硬拆一个逻辑函数（函数跨段时整体判）。Very large file (>500 lines) → if a full-file audit is requested, split into **~500-line segments**: score each segment independently, then give a cross-segment summary — avoids severity distortion or context overflow from one huge sweep. Don't hard-split a single logical function across segments (judge it whole if it spans).
 - 网络 / 凭据：N/A。本 skill 不联网、不读凭据（见《合规与边界声明》），故无「海外源不可达需降级」场景。Network/credentials: N/A — this skill is offline and reads no secrets, so no "overseas source unreachable → degrade" case.
 
 ## 输入要求 / Input Requirements
@@ -215,5 +228,7 @@ Closing note: fix all red; keep amber if "comment + scoped"; green means clean. 
   If you later add a script that reads env vars or calls binaries, declare it in `metadata.openclaw.requires.env` / `requires.bins` (ClawHub's mismatch-audit red line). This skill has none today.
   - **声明与行为必须一致（Trust 红线）**：本 skill 的「只读」特指*被审计的代码*——它从不改动被审源码，但会写自身报告/清单产物。任何 frontmatter / 合规段的描述都须与此一致；若未来新增会写其他路径或读凭据的脚本，必须同步在 `metadata.openclaw.requires` 声明，避免 ClawHub 的「声明-行为 mismatch」审核命中。
     **Declared == behaved (Trust red line)**: "read-only" here means the *code under audit* — this skill never modifies the source it reviews, but it does write its own report/checklist artifacts. Every frontmatter / compliance statement must match this; if a future script writes other paths or reads credentials, declare it in `metadata.openclaw.requires` to avoid ClawHub's declaration-behavior mismatch audit.
+  - **可选脚本 `scripts/metric_probe.py` 不入 `requires`**：它是纯标准库、`ast` 解析、零网络、零凭据、只读，仅输出指标探针；不读环境变量、不调用二进制，故无需在 `metadata.openclaw.requires` 声明（与导出脚本 `clean_code_clawhub_export.py` 不同——后者仅本地构建用，已被 `.clawhubignore` 排除）。
+    **Optional `scripts/metric_probe.py` needs no `requires`**: pure stdlib, `ast`-based, offline, no credentials, read-only, emits metric hints only; it reads no env and calls no binaries, so no `metadata.openclaw.requires` declaration (unlike `clean_code_clawhub_export.py`, which is build-only and excluded by `.clawhubignore`).
 - 多平台发布：源仓库 frontmatter 保留 `license: MIT` 供 SkillHub；ClawHub 导出副本由发布脚本剥离 `license` 字段并排除 LICENSE（见 `.clawhubignore`）。
   Multi-platform: the source keeps `license: MIT` for SkillHub; the ClawHub export strips the `license` field and excludes LICENSE (see `.clawhubignore`).

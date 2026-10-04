@@ -1,7 +1,7 @@
 # skill-clean-audit
 
-> 第一性原理 Clean Code 审计法 —— 一个**只读、可读、可复用**的 Agent Skill。当前版本 **v1.1.0**。
-> First-Principles Clean Code Auditor — a **read-only, readable, reusable** agent skill. Current version **v1.1.0**.
+> 第一性原理 Clean Code 审计法 —— 一个**只读、可读、可复用**的 Agent Skill。当前版本 **v1.3.0**。
+> First-Principles Clean Code Auditor — a **read-only, readable, reusable** agent skill. Current version **v1.3.0**.
 
 **合规 / Compliance**：纯本地只读审计，不联网、不读凭据、无第三方接口，不提供 / 不指导 / 不支持任何规避网络管理措施的能力。详见 SKILL.md《合规与边界声明》。
 Purely local, read-only audit: no network, no credentials, no third-party APIs; provides / instructs / supports no means to circumvent network-management measures. See *Compliance & Boundary Statement* in SKILL.md.
@@ -63,24 +63,40 @@ Full interactive checklist: **[`assets/clean_code_checklist.html`](assets/clean_
 
 ```
 skill-clean-audit/
-├── SKILL.md                       # 方法论 + 审计流程 + 输出格式 + 边界声明 + 合规声明
-│                                   # methodology + audit flow + output format + boundaries + compliance
+├── SKILL.md                       # 方法论 + 审计流程 + 输出格式 + 边界声明 + 合规声明 + 30秒上手 + 语言选择
+│                                   # methodology + audit flow + output format + boundaries + compliance + quick start + language
 ├── LICENSE                        # MIT（开源用；不进 SkillHub / ClawHub 发布包）
 │                                   # MIT (for open source; excluded from SkillHub / ClawHub publish packages)
-├── README.md                      # 本文件（中英对照）。注意：ClawHub 发布包不含 README.md
-│                                   # this file (bilingual). NOTE: ClawHub publish package omits README.md
+├── README.md                      # 本文件（中文）。注意：ClawHub 发布包不含 README.md
+│                                   # this file (Chinese). NOTE: ClawHub publish package omits README.md
+├── README.en.md                   # 英文版 README（本仓库双语对外文档之一）
+│                                   # English README (one of this repo's bilingual docs)
 ├── CHANGELOG.md                   # 版本记录 version history
 ├── .gitignore                     # 忽略生成的审计报告/清单 ignores generated audit artifacts
-├── .clawhubignore                 # ClawHub 排除清单（含 LICENSE）ClawHub exclusion manifest (incl. LICENSE)
+├── .clawhubignore                 # ClawHub 排除清单（含 LICENSE 与开发者导出脚本，不含 metric_probe.py）
+│                                   # ClawHub exclusion manifest (incl. LICENSE + the dev export script, NOT metric_probe.py)
 ├── assets/
-│   └── clean_code_checklist.html  # 交互式可勾清单（审计时复制到工作区复用）
-│                                   # interactive checklist (copied to workspace for reuse during audit)
-└── references/
-    ├── clean_code_audit_sample.md # 完整范例：用合成示例脚本 demo-skill 的 main() 真审出来
-    │                               # full sample: a real audit of synthetic demo-skill's main()
-    └── smells_crosswalk.md        # Uncle Bob 气味 → A/B 轴 + 红黄绿 桥接表
-    │                               # Uncle Bob smells → A/B axes + red/amber/green crosswalk
+│   ├── clean_code_checklist.html  # 交互式可勾清单（中文，审计时复制到工作区复用）
+│   │                               # interactive checklist (Chinese)
+│   └── clean_code_checklist.en.html # 交互式可勾清单（英文）interactive checklist (English)
+├── references/
+│   ├── clean_code_audit_sample.md # 完整范例（中文，合成函数式聚合样本）
+│   │                               # full sample (Chinese, synthetic functional aggregation)
+│   ├── clean_code_audit_sample.en.md # 完整范例（英文）full sample (English)
+│   ├── clean_code_audit_sample_complex.md  # 复杂场景范例（中文：类/继承/异步/全局态）
+│   │                               # complex sample (Chinese: class/inheritance/async/global)
+│   ├── clean_code_audit_sample_complex.en.md # 复杂场景范例（英文）complex sample (English)
+│   ├── faq.md                     # 常见问题（中文）FAQ (Chinese)
+│   ├── faq.en.md                   # 常见问题（英文）FAQ (English)
+│   └── smells_crosswalk.md        # Uncle Bob 气味 → A/B 轴 + 红黄绿 桥接表
+│                                   # Uncle Bob smells → A/B axes + red/amber/green crosswalk
+└── scripts/
+    ├── metric_probe.py            # 可选指标探针（纯 stdlib，只提示不判级）optional metric probe (pure stdlib, hints only)
+    └── clean_code_clawhub_export.py # 开发者本地导出脚本（不进 ClawHub 包）dev export script (excluded from ClawHub)
 ```
+
+> **双语 / Bilingual**：本 skill 的全部产物（清单、范例、FAQ、README）均提供中文版与英文版，触发时先按《语言选择》定 `auto`/`zh`/`en` 模式再开工——语言不是隐藏默认值。
+> **Bilingual**: every artifact (checklist, samples, FAQ, README) ships in both Chinese and English; pick the `auto`/`zh`/`en` mode via *Language Selection* before starting — language is never a hidden default.
 
 ---
 
@@ -97,8 +113,11 @@ Place the whole directory at `~/.workbuddy/skills/skill-clean-audit/`, then in c
 或任一触发词 / or any trigger：`理解成本/修改风险`、`clean code 审计`、`审计我的 Skill 脚本`、`按红黄绿审代码`
 comprehension/change risk, clean code audit, audit my skill scripts, score code red/amber/green.
 
-它会把 `assets/clean_code_checklist.html` 复制到你的工作区，并把报告写成 `<workspace>/clean_code_audit_<target>.md`。
-It copies `assets/clean_code_checklist.html` into your workspace and writes the report to `<workspace>/clean_code_audit_<target>.md`.
+它会把 `assets/clean_code_checklist.html`（中文）或 `assets/clean_code_checklist.en.html`（英文）复制到你的工作区，并把报告写成 `<workspace>/clean_code_audit_<target>.md`。
+It copies `assets/clean_code_checklist.html` (Chinese) or `assets/clean_code_checklist.en.html` (English) into your workspace and writes the report to `<workspace>/clean_code_audit_<target>.md`.
+
+> **选语言 / Pick language**：对话里说 `zh` 强制中文、`en` 强制英文，或不说走 `auto`（按消息语言判定）。详见 SKILL.md《语言选择》。
+> Say `zh` to force Chinese, `en` to force English, or leave it for `auto` (follows your message). See *Language Selection* in SKILL.md.
 
 ### 方法论迁移到其他平台 / Porting the method to other platforms
 
