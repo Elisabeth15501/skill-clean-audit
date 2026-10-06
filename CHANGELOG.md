@@ -8,7 +8,7 @@
 - **P1 · 评测驱动**：③ FAQ——新建 `references/faq.md` + `references/faq.en.md` 集中解答 7 个高频问题（回应 C·反模式与FAQ 4.0）；④ 异常与降级升级——「文件缺失/无权限」改为 3 步行动指引（回应 R·异常处理 4.0）；⑤ 新增 `scripts/metric_probe.py`（纯 stdlib / `ast` 解析，只提示不判级，5 项指标信号，回应 E·开箱即用度 4.5 与总评「无自动化脚本」）；`.clawhubignore` 收窄为只排除导出脚本本身，使 metric_probe 能进 ClawHub 包。
 - **P2 · 打磨**：⑥ 复杂场景样例——`references/clean_code_audit_sample_complex.md` + `.en.md`（类/继承/异步/全局态合成样本，演示 B 轴优先亮红灯）；⑦ 顶部《30 秒上手》5 行 Quick Start（回应 C·渐进式披露「章节多需耐心」）；⑧ 大文件分段兜底（>500 行按 ~500 行/段分段审 + 跨段汇总）。
 - **双语交付**：README 新增 `README.en.md`，全部产物（清单/样例/FAQ/README）均提供中英文版；语言模式 auto/zh/en 由用户在触发时显式或按消息语言判定。
-- 验收：ClawHub 重扫应消解 2 条 Medium mismatch + 4 条自然语言项；TRACE 目标 R→4.8+/C→4.8+/E→4.9+/总评≥4.9；`skillhub-gate` 对导出副本 PASS。
+- 验收：ClawHub 重扫应消解 2 条 Medium mismatch + 4 条自然语言项；TRACE 目标 R→4.8+/C→4.8+/E→4.9+/总评≥4.9；`skill-publish-gate` 对导出副本 PASS。
 
 ## v1.2.0 (2026-09-30)
 
@@ -18,7 +18,7 @@
 - **D4 工作流完整性**：新增《异常与降级》小节——文件缺失/无权限、非代码文件、超大文件(>2000 行)、网络/凭据 N/A 四类的显式处理，与「纯本地只读」行为一致，强化合规 Trust 维度。
 - **D5 输入输出清晰度**：新增《输入要求》小节——明确接受 `.py/.js/.ts` 及任何人类可读源码文本、拒绝二进制/图片/数据/混淆代码、说明报告「不覆盖已有同名文件」的写盘行为，消除 Agent 误判「不支持某语言而拒触发」。
 - **D2 路由提示（锦上添花）**：「它是什么/不是什么」末尾补「单文件→直接走流程；整 skill 目录→逐个脚本审、优先最常被改的」路由。
-- 验收目标：重跑 8 维度评估 D2/D4/D5 ≥ 9、加权总分 ≥ 9.1；`skillhub-gate` 对剥离封禁文件后的导出副本仍 PASS。
+- 验收目标：重跑 8 维度评估 D2/D4/D5 ≥ 9、加权总分 ≥ 9.1；`skill-publish-gate` 对剥离封禁文件后的导出副本仍 PASS。
 
 ## v1.1.1 (2026-09-28)
 
@@ -40,7 +40,7 @@ ClawHub 发布前优化 + 中英对照文档（能力不变）：
   - 源仓库 frontmatter 仍保留 `license: MIT` / `slug` / `displayName`（供 SkillHub）；这些字段由 ClawHub 导出脚本剥离，不在发布包内。
 - 多平台授权说明：GitHub / SkillHub 副本仍为 MIT（保留署名）；ClawHub 发布包按平台规则默认 MIT-0，源仓库**无需**改授 MIT-0。
 - **ClawHub 审核通过（2026-09-28）**：首次发布 `versionId=k97d3cnx0df9jwtdm5kmpcdhzh8f0mr3`，安全扫描 `Moderate CLEAN`；新发布排队复核期间曾显示 `Hidden / Needs review`，现已恢复 `Visible`（公开可见、可安装，非违规判定）。
-- **skillhub-gate 实跑修到 PASS**：补 `SKILL.md` frontmatter 推荐字段 `summary` / `tags`（根因为中英对照版 description 折叠块内误置 `---` 视觉分隔线导致 frontmatter 被提前闭合）；`README.md` 去真实用户名；`scripts/clean_code_clawhub_export.py` 脱敏正则改动态读取当前用户（`getpass.getuser()`），源码不再含硬编码用户名路径。对「剥离封禁文件后的发布包」跑门禁结论 `PASS (exit 0, 0 问题)`。
+- **skill-publish-gate 实跑修到 PASS**：补 `SKILL.md` frontmatter 推荐字段 `summary` / `tags`（根因为中英对照版 description 折叠块内误置 `---` 视觉分隔线导致 frontmatter 被提前闭合）；`README.md` 去真实用户名；`scripts/clean_code_clawhub_export.py` 脱敏正则改动态读取当前用户（`getpass.getuser()`），源码不再含硬编码用户名路径。对「剥离封禁文件后的发布包」跑门禁结论 `PASS (exit 0, 0 问题)`。
 
 ## v1.0.1 (2026-09-25)
 
