@@ -2,7 +2,7 @@
 name: skill-clean-audit
 slug: skill-clean-audit
 displayName: 第一性原理 Clean Code 审计
-version: 1.3.0
+version: 1.4.0
 license: MIT
 description: >
   第一性原理 clean code 审计法。从单根前提「代码是写给人看的」推导出两根判据——
@@ -75,17 +75,15 @@ This skill ships every artifact (interactive checklist, audit report, samples, F
 
 **Resolution priority**: your explicit `zh`/`en` > inferred `auto` from exchange language > ask. **No mid-audit switch** (avoids mixed-language report); re-resolved next round.
 
-**产物映射 / Artifact mapping**（按模式选文件）：
+产物按模式选文件（中英各一套，含清单 / 两种样例 / FAQ，完整映射表见 **`references/faq.md` §8**）。产物按模式选文件，缺失英文版时 fallback 到中文并注明，**不静默给错语言**。Pick artifacts by mode (full mapping table in **`references/faq.md` §8**); if an English version is missing, fall back to Chinese and note it — never silently give the wrong language.
 
-| 产物 | `zh` | `en` |
-|---|---|---|
-| 交互清单 | `assets/clean_code_checklist.html` | `assets/clean_code_checklist.en.html` |
-| 审计样例 | `references/clean_code_audit_sample.md` | `references/clean_code_audit_sample.en.md` |
-| 复杂样例 | `references/clean_code_audit_sample_complex.md` | `references/clean_code_audit_sample_complex.en.md` |
-| FAQ | `references/faq.md` | `references/faq.en.md` |
+## 执行模型（方法论型，非工具型）/ Execution Model (Methodology, Not Tool)
 
-> 缺失某英文版时 fallback 到中文并在报告中注明「该范例暂无英文版」，**不静默给错语言**。
-> If an English version is missing, fall back to Chinese and note "no English version yet" in the report — **never silently give the wrong language**.
+本 skill 是**方法论型**：交付「判据 + 流程 + 可勾选清单」，由你（Agent）逐项判断并给 `文件:行号` 证据。审计的核心动作是**判断**（这段代码偏 A 还是偏 B、是红还是有意的债），本质是人的推理，**无法预先写成确定性自动流程**。
+This skill is **methodology-type**: it ships criteria + flow + a tickable checklist that you (the agent) apply item by item with `file:line` evidence. The core action is *judgment*, which cannot be pre-encoded into a deterministic pipeline.
+
+> **因此没有端到端自动化脚本是设计决策，不是缺失。** 唯一的 `scripts/metric_probe.py` 是**可选加速器**——只探测指标信号帮你快速定位疑点，**只提示不判级**；用不用它，审计质量标准不变。
+> **The absence of an end-to-end automation script is a design decision, not a gap.** The only script, `scripts/metric_probe.py`, is an *optional accelerator* — it locates suspects fast but *hints only, never grades*; the quality bar is unchanged whether you run it or not.
 
 ## 它是什么 / 不是什么 / What it is / is not
 
@@ -104,6 +102,17 @@ Three things no existing skill does: ① rules are *derived*, not given; ② a c
 
 - **路由提示 / Routing**：给单个文件或函数 → 直接走下方「审计流程」；给整个 Skill 目录 → 建议逐个脚本审，优先挑最常被修改的那几个（修改风险本就高）。Give one file/function → go straight to Audit Flow; give a whole skill dir → audit script by script, prioritizing the most-frequently-changed ones (high change risk by nature).
 - **常见疑问 / FAQ**：边界、产物写到哪、支持语言、是否联网等高频问题集中见 **`references/faq.md`**（中文）或 **`references/faq.en.md`**（英文），按《语言选择》模式选。Common questions (boundaries, where reports go, supported languages, network needs) are centralized in **`references/faq.md`** (zh) or **`references/faq.en.md`** (en), picked per the Language mode.
+
+**我该读哪个文件 / Which file to read**（渐进式披露导航 / progressive-disclosure routing）：
+
+| 何时 / when | 读 / read |
+|---|---|
+| 常规审计主流程 / normal audit | 本文件《审计流程》· `assets/clean_code_checklist.html`（按语言选 `.en`） |
+| 不确定某 smell 算 A 还是 B / smell → A or B? | `references/smells_crosswalk.md` |
+| 想看一份完整报告长什么样 / full report example | `references/clean_code_audit_sample.md`（或 `.en`） |
+| 类 / 继承 / 异步 / 全局态代码 | `references/clean_code_audit_sample_complex.md`（或 `.en`） |
+| 边界、产物位置、异常细则、产物映射 | `references/faq.md`（或 `.en`） |
+| 想快筛疑点 / quick suspect scan | `scripts/metric_probe.py --src <file>` |
 
 ## 第一性原理推导 / First-Principles Derivation
 
@@ -132,24 +141,14 @@ Full interactive checklist: **`assets/clean_code_checklist.html`** (open to tick
 
 ## 轻量指标信号（核查提示，非硬规则）/ Lightweight Metric Signals (hints, not hard rules)
 
-以下数字只作「值得多看一眼」的探针，**不是自动判红**。第一性原理的判据永远是 A/B 两轴，指标只是帮你更快定位疑点：
-The numbers below are only probes for "worth a closer look" — **not automatic red flags**. The first-principles criteria remain the A/B axes; metrics just help you locate suspects faster:
+第一性原理的判据永远是 A/B 两轴；以下数字只是**「值得多看一眼」的探针**，帮你更快定位疑点，**不是自动判红**：
+The first-principles criteria remain the A/B axes; the numbers below are only probes to locate suspects faster — **not automatic red flags**:
 
-- 函数行数 > 40：可能是 **A** 信号，需看是否仍内聚；若内聚难拆，归黄。
-  Function > 40 lines: possible **A** signal; check cohesion; if hard to split, amber.
-- 参数数 ≥ 4：可能是 **A** 信号（调用处难读懂意图），优先抽 options 对象。
-  Params ≥ 4: possible **A** signal (call site hard to read); prefer an options object.
-- 嵌套深度 ≥ 4（if/for/try 层层套）：**A** 信号，读者需脑内维护多个上下文。
-  Nesting ≥ 4: **A** signal, reader must hold multiple contexts in head.
-- 布尔旗参数（`def f(..., dry_run=False)`）：**A** 信号，函数实际做两件相反的事，违反单一职责。
-  Boolean flag params: **A** signal, the function does two opposite things (SRP violation).
-- 单文件/单函数内同类逻辑重复 ≥ 3 次：**B** 信号（DRY 违反，改一处忘一处）。
-  Same logic repeated ≥ 3× in a file/function: **B** signal (DRY violation, fix-one-forget-another).
+- 函数 > 40 行 · 参数 ≥ 4 · 嵌套 ≥ 4 · 布尔旗参数 · 同类逻辑重复 ≥ 3 次 —— 五项信号
+  Function > 40 lines · params ≥ 4 · nesting ≥ 4 · boolean-flag params · same logic repeated ≥ 3× — five signals
 
-> 重申 / Restated：指标命中 ≠ 脏。若它能用「注释说清 + 范围可控」解释，且真降低了理解/修改成本，仍是干净的。指标只为节省你逐行扫的时间。
-> Metric hit ≠ dirty. If explained by "comment + scoped" and it truly lowers cost, it stays clean. Metrics only save you line-by-line scanning time.
-
-可用 **`scripts/metric_probe.py`**（纯 Python 标准库）自动探测上述 5 项信号，输出带 `file:line` 的清单，便于快速定位疑点；脚本**只提示不判级**，最终仍由你按 A/B 两轴人工判。You can run **`scripts/metric_probe.py`** (pure Python stdlib) to auto-detect these 5 signals with `file:line` references; the script *hints only, never grades* — you still judge via the A/B axes.
+> 五项信号的完整定义、A/B 轴归属判读、以及「命中 ≠ 脏」的完整论证见 **`references/faq.md` §5**；可跑 **`scripts/metric_probe.py --src <file>`** 自动探测并输出 `file:line` 清单（纯 stdlib，**只提示不判级**，最终仍由你按两轴判断）。
+> Full definitions, A/B attribution, and the "a hit ≠ dirty" argument: **`references/faq.md` §5**. Run **`scripts/metric_probe.py --src <file>`** to auto-detect with `file:line` output (pure stdlib, *hints only, never grades*).
 
 ## 审计流程 / Audit Flow
 
@@ -168,8 +167,7 @@ The numbers below are only probes for "worth a closer look" — **not automatic 
 
 - 文件不存在 / 无读权限 → **给 3 步自查指引，不要只回「读不到」**：① 核对路径拼写与相对/绝对路径（`./` 相对的是工作区根目录，不是被审文件所在目录）；② 确认文件确实存在——列出目录验证（`ls` / 文件管理器）；③ 请用户贴正确路径，或把文件放进工作区根目录再试。**不猜测、不降级去审别的文件**。File missing / no read permission → **give a 3-step self-check, don't just say "can't read"**: ① check path spelling and relative/absolute form (`./` is the workspace root, not the audited file's dir); ② confirm the file exists — list the directory to verify; ③ ask the user to paste the correct path, or drop the file into the workspace root and retry. Never silently audit another file.
 - 非代码文件（图片 / 二进制 / 数据）→ 拒绝审计，说明本 skill 只审源码文本。Non-source file (image / binary / data) → refuse, explain scope (source text only).
-- 超大文件（>500 行）→ 若用户要整文件审，按 **~500 行一段**分段审：每段独立打红黄绿，最后给「跨段汇总」，避免一次性扫全文件导致严重度失真或上下文溢出。**不**为凑分段而硬拆一个逻辑函数（函数跨段时整体判）。Very large file (>500 lines) → if a full-file audit is requested, split into **~500-line segments**: score each segment independently, then give a cross-segment summary — avoids severity distortion or context overflow from one huge sweep. Don't hard-split a single logical function across segments (judge it whole if it spans).
-- 网络 / 凭据：N/A。本 skill 不联网、不读凭据（见《合规与边界声明》），故无「海外源不可达需降级」场景。Network/credentials: N/A — this skill is offline and reads no secrets, so no "overseas source unreachable → degrade" case.
+- 超大文件 / 整目录 / 网络凭据 → 细则见 **`references/faq.md` §4 / §7**。Large file / whole dir / network-credentials → details in **`references/faq.md` §4 / §7**.
 
 ## 输入要求 / Input Requirements
 
@@ -228,7 +226,9 @@ Closing note: fix all red; keep amber if "comment + scoped"; green means clean. 
   If you later add a script that reads env vars or calls binaries, declare it in `metadata.openclaw.requires.env` / `requires.bins` (ClawHub's mismatch-audit red line). This skill has none today.
   - **声明与行为必须一致（Trust 红线）**：本 skill 的「只读」特指*被审计的代码*——它从不改动被审源码，但会写自身报告/清单产物。任何 frontmatter / 合规段的描述都须与此一致；若未来新增会写其他路径或读凭据的脚本，必须同步在 `metadata.openclaw.requires` 声明，避免 ClawHub 的「声明-行为 mismatch」审核命中。
     **Declared == behaved (Trust red line)**: "read-only" here means the *code under audit* — this skill never modifies the source it reviews, but it does write its own report/checklist artifacts. Every frontmatter / compliance statement must match this; if a future script writes other paths or reads credentials, declare it in `metadata.openclaw.requires` to avoid ClawHub's declaration-behavior mismatch audit.
-  - **可选脚本 `scripts/metric_probe.py` 不入 `requires`**：它是纯标准库、`ast` 解析、零网络、零凭据、只读，仅输出指标探针；不读环境变量、不调用二进制，故无需在 `metadata.openclaw.requires` 声明（与导出脚本 `clean_code_clawhub_export.py` 不同——后者仅本地构建用，已被 `.clawhubignore` 排除）。
-    **Optional `scripts/metric_probe.py` needs no `requires`**: pure stdlib, `ast`-based, offline, no credentials, read-only, emits metric hints only; it reads no env and calls no binaries, so no `metadata.openclaw.requires` declaration (unlike `clean_code_clawhub_export.py`, which is build-only and excluded by `.clawhubignore`).
+  - **可选脚本 `scripts/metric_probe.py` 已评估并显式豁免 `requires`**：它是纯标准库 `ast` 解析、零网络、零凭据、只读，仅输出指标探针；**不读环境变量、不调用二进制**，故不触发 ClawHub 的 `requires` 声明义务（与导出脚本 `clean_code_clawhub_export.py` 不同——后者仅本地构建用，已被 `.clawhubignore` 排除）。**若该脚本未来触碰任一条件（读 env / 调二进制 / 写被审源码 / 联网），必须立即改为声明**，不得继续豁免。
+    **Optional `scripts/metric_probe.py` is explicitly exempted from `requires` after assessment**: pure stdlib `ast`-based, offline, no credentials, read-only, emits metric hints only; it **reads no env and calls no binaries**, so it does not trigger ClawHub's `requires` declaration obligation (unlike `clean_code_clawhub_export.py`, which is build-only and excluded by `.clawhubignore`). **If it ever touches any of those conditions (reads env / calls binaries / writes audited source / goes online), it must be declared immediately** — no continued exemption.
+- **主文件行数预算（硬闸）**：本文件目标 **≤215 行**、硬上限 **250 行**（渐进式披露是 C 维度的高分项，膨胀会反向扣分）。新增内容前先自查：能下沉到 `references/` 的就别留在主文件；超限须先把内容下沉再合入。
+  **Main-file line budget (hard gate)**: target **≤215 lines**, hard cap **250 lines** (progressive disclosure is a strong C-dimension signal; bloat scores back). Before adding content, self-check: anything that can live in `references/` must not stay here; if over cap, push content down before merging.
 - 多平台发布：源仓库 frontmatter 保留 `license: MIT` 供 SkillHub；ClawHub 导出副本由发布脚本剥离 `license` 字段并排除 LICENSE（见 `.clawhubignore`）。
   Multi-platform: the source keeps `license: MIT` for SkillHub; the ClawHub export strips the `license` field and excludes LICENSE (see `.clawhubignore`).

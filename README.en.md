@@ -76,6 +76,27 @@ skill-clean-audit/
 
 > **Bilingual / 双语**: every artifact (checklist, samples, FAQ, README) ships in both Chinese and English; pick the `auto`/`zh`/`en` mode via *Language Selection* before starting — language is never a hidden default.
 
+### Which file to read / 我该读哪个文件
+
+| When / 何时 | Read / 读 |
+|---|---|
+| Normal audit | `SKILL.md` *Audit Flow* · `assets/clean_code_checklist.html` (English `.en.html`) |
+| Is this smell A or B? | `references/smells_crosswalk.md` |
+| Full report example | `references/clean_code_audit_sample.md` (or `.en.md`) |
+| Class / inheritance / async / global-state code | `references/clean_code_audit_sample_complex.md` (or `.en.md`) |
+| Boundaries, artifact locations, exceptions, artifact mapping, metric definitions | `references/faq.md` (or `.en.md`) |
+| Quick suspect scan | `scripts/metric_probe.py --src <file>` |
+
+---
+
+## Execution Model (Methodology, Not Tool) / 执行模型（方法论型，非工具型）
+
+This skill ships criteria + flow + a tickable checklist that you (the agent) apply with `file:line` evidence. The core action is *judgment* — "does this code lean A or B, is it red or intentionally-amber debt" — which is human reasoning and cannot be pre-encoded into a deterministic pipeline.
+
+**The absence of an end-to-end automation script is a design decision, not a gap.** The only script, `scripts/metric_probe.py`, is an *optional accelerator* — it locates suspects fast but *hints only, never grades*.
+
+本 skill 交付「判据 + 流程 + 可勾选清单」，由你逐项判断并给 `文件:行号` 证据。审计的核心动作是**判断**，本质是人的推理，**无法预先写成确定性自动流程**。**没有端到端自动化脚本是设计决策，不是缺失**；`metric_probe.py` 仅为可选加速器（只提示不判级）。
+
 ---
 
 ## Usage / 用法
