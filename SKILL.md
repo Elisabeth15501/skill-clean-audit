@@ -45,8 +45,8 @@ tags:
 
 ## 合规与边界声明（网络访问）/ Compliance & Boundary Statement (Network Access)
 
-  - 本 skill **不发起任何网络请求**，不调用任何第三方 / 海外 API，不读取任何凭据、密钥或环境变量；它**只读被审计的*代码*本身**（从不修改被审源码），并额外把自身产出（审计报告 + 清单）写到工作区——这是它唯一会做的写入，且在此声明（见下方 Trust 红线）。
-  This skill makes **no network requests**, calls no third-party / overseas API, reads no credentials, secrets, or env vars; it **reads only the *code under audit* (never modifies the source being reviewed)** and additionally writes its own output artifacts (audit report + checklist) to the workspace — the only write it performs, disclosed here (see the Trust red line below).
+  - 本 skill **不发起任何网络请求**，不调用任何第三方 / 海外 API，不读取任何凭据、密钥或环境变量；它**只读被审计的*代码*本身**（从不修改被审源码），并额外把自身产出（审计报告 + 清单）写到工作区——写入范围仅限这两类产物，且在此声明（见下方 Trust 红线）。
+  This skill makes **no network requests**, calls no third-party / overseas API, reads no credentials, secrets, or env vars; it **reads only the *code under audit* (never modifies the source being reviewed)** and additionally writes its own output artifacts (audit report + checklist) to the workspace — its writes are limited to those two artifact types, disclosed here (see the Trust red line below).
 - **不提供、不指导、不支持任何规避网络管理措施的能力**；不使用非公开接口、不破解访问控制、不伪造身份绕过鉴权。
   Provides / instructs / supports **no means to circumvent network-management measures**; no private interfaces, no access-control bypass, no identity spoofing.
 - 无「数据源 / 海外源」概念——全部输入来自本地文件，故「海外源不可达需降级」场景不适用（N/A）。
@@ -82,8 +82,8 @@ This skill ships every artifact (interactive checklist, audit report, samples, F
 本 skill 是**方法论型**：交付「判据 + 流程 + 可勾选清单」，由你（Agent）逐项判断并给 `文件:行号` 证据。审计的核心动作是**判断**（这段代码偏 A 还是偏 B、是红还是有意的债），本质是人的推理，**无法预先写成确定性自动流程**。
 This skill is **methodology-type**: it ships criteria + flow + a tickable checklist that you (the agent) apply item by item with `file:line` evidence. The core action is *judgment*, which cannot be pre-encoded into a deterministic pipeline.
 
-> **因此没有端到端自动化脚本是设计决策，不是缺失。** 唯一的 `scripts/metric_probe.py` 是**可选加速器**——只探测指标信号帮你快速定位疑点，**只提示不判级**；用不用它，审计质量标准不变。
-> **The absence of an end-to-end automation script is a design decision, not a gap.** The only script, `scripts/metric_probe.py`, is an *optional accelerator* — it locates suspects fast but *hints only, never grades*; the quality bar is unchanged whether you run it or not.
+> **因此没有端到端自动化脚本是设计决策，不是缺失。** 本 skill 提供的 `scripts/metric_probe.py` 是**可选加速器**——只探测指标信号帮你快速定位疑点，**只提示不判级**；用不用它，审计质量标准不变。
+> **The absence of an end-to-end automation script is a design decision, not a gap.** The `scripts/metric_probe.py` shipped here is an *optional accelerator* — it locates suspects fast but *hints only, never grades*; the quality bar is unchanged whether you run it or not.
 
 ## 它是什么 / 不是什么 / What it is / is not
 

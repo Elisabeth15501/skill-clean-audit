@@ -74,5 +74,5 @@ Artifact mapping per language mode. If an English version is missing, fall back 
 ## 9. 这个 skill 是「工具」还是「方法论」？为什么没有端到端脚本？
 **方法论型（methodology）**，不是工具型。审计的核心动作是**判断**——「这段代码偏 A 还是偏 B、是红还是有意黄的债」本质是人的推理，无法预先写成确定性的自动流程。所以本 skill 交付的是「判据 + 流程 + 可勾选清单」，由你（Agent）逐项判断并给出 `文件:行号` 证据。
 
-**因此没有端到端自动化脚本是设计决策，不是缺失。** 唯一的脚本 `scripts/metric_probe.py` 是**可选加速器**：它只探测 5 类指标信号、输出 `file:line` 清单帮你快速定位疑点，**只提示不判级**——严重度仍由你按 A/B 两轴判断。用不用它，审计结果的质量标准不变。
+**因此没有端到端自动化脚本是设计决策，不是缺失。** 本 skill 提供的 `scripts/metric_probe.py` 是**可选加速器**：它只探测 5 类指标信号、输出 `file:line` 清单帮你快速定位疑点，**只提示不判级**——严重度仍由你按 A/B 两轴判断。用不用它，审计结果的质量标准不变。
 Methodology-type, not tool-type. The core action is *judgment*, which cannot be pre-encoded into a deterministic pipeline. The absence of an end-to-end script is a design decision, not a gap; `metric_probe.py` is an optional accelerator only.

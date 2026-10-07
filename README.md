@@ -115,9 +115,9 @@ skill-clean-audit/
 
 本 skill 交付「判据 + 流程 + 可勾选清单」，由你（Agent）逐项判断并给 `文件:行号` 证据。审计的核心动作是**判断**（这段代码偏 A 还是偏 B、是红还是有意的债），本质是人的推理，**无法预先写成确定性自动流程**。
 
-**因此没有端到端自动化脚本是设计决策，不是缺失。** 唯一的 `scripts/metric_probe.py` 是**可选加速器**——只探测指标信号帮你快速定位疑点，**只提示不判级**。
+**因此没有端到端自动化脚本是设计决策，不是缺失。** 本 skill 提供的 `scripts/metric_probe.py` 是**可选加速器**——只探测指标信号帮你快速定位疑点，**只提示不判级**。
 
-This skill ships criteria + flow + a tickable checklist that you (the agent) apply with `file:line` evidence. The core action is *judgment* — human reasoning, not pre-encodable as a deterministic pipeline. **The absence of an end-to-end script is a design decision, not a gap**; `metric_probe.py` is an *optional accelerator* (*hints only, never grades*).
+This skill ships criteria + flow + a tickable checklist that you (the agent) apply with `file:line` evidence. The core action is *judgment* — human reasoning, not pre-encodable as a deterministic pipeline. **The absence of an end-to-end script is a design decision, not a gap**; the `metric_probe.py` shipped here is an *optional accelerator* (*hints only, never grades*).
 
 ---
 
